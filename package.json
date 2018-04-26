@@ -34,7 +34,7 @@
     "@angular/service-worker": "5.2.9",
     "@ngrx/effects": "5.1.0",
     "@ngrx/store": "5.1.0",
-    "@ngrx/store-devtools": "5.1.0",
+    "@ngrx/store-devtools": "^5.2.0",
     "@nguniversal/express-engine": "5.0.0",
     "@nguniversal/module-map-ngfactory-loader": "5.0.0",
     "@thoughtram/amc-demo-lib": "1.0.1",

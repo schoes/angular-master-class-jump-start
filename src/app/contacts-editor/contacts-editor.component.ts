@@ -7,6 +7,7 @@ import {Store} from '@ngrx/store';
 import {ApplicationState} from '../state/app.state';
 import {Observable} from 'rxjs/Observable';
 import {map} from 'rxjs/operators';
+import {ContactsQuery} from '../state/contacts/contacts.reducer';
 
 @Component({
   selector: 'trm-contacts-editor',
@@ -25,10 +26,7 @@ export class ContactsEditorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.contact$ = this.store.select(state => {
-      let id = state.contacts.selectedContactId;
-      return state.contacts.list.find(contact => contact.id == id);
-    }).pipe(map(contact => ({...contact})));
+    this.contact$ = this.store.select(ContactsQuery.getSelectedContact).pipe(map(contact => ({...contact})));
 
   }
 
