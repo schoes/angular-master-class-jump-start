@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Contact } from '../models/contact';
-import { ContactsService } from '../contacts.service';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Contact} from '../models/contact';
+import {ContactsService} from '../contacts.service';
+import {SelectContactAction, UpdateContactAction} from '../state/contacts/contacts.actions';
+import {Store} from '@ngrx/store';
+import {ApplicationState} from '../state/app.state';
 
 @Component({
   selector: 'trm-contacts-editor',
@@ -11,15 +14,20 @@ import { ContactsService } from '../contacts.service';
 export class ContactsEditorComponent implements OnInit {
 
   // we need to initialize since we can't use ?. operator with ngModel
-  contact: Contact = <Contact>{ address: {}};
+  contact: Contact = <Contact>{address: {}};
 
   constructor(private contactsService: ContactsService,
               private router: Router,
-              private route: ActivatedRoute) {}
+              private route: ActivatedRoute,
+              private store: Store<ApplicationState>) {
+  }
 
   ngOnInit() {
+    let id = this.route.snapshot.paramMap.get('id');
+    this.store.dispatch(new SelectContactAction('' + id));
+
     this.contactsService.getContact(this.route.snapshot.paramMap.get('id'))
-                        .subscribe(contact => this.contact = contact);
+      .subscribe(contact => this.contact = contact);
   }
 
   cancel(contact: Contact) {
@@ -27,12 +35,15 @@ export class ContactsEditorComponent implements OnInit {
   }
 
   save(contact: Contact) {
-   this.contactsService.updateContact(contact)
-                       .subscribe(() => this.goToDetails(contact));
+    this.contactsService.updateContact(contact)
+      .subscribe(updatedContact => {
+        this.store.dispatch(new UpdateContactAction(updatedContact));
+        this.goToDetails(contact);
+      });
   }
 
   private goToDetails(contact: Contact) {
-    this.router.navigate(['/contact', contact.id ]);
+    this.router.navigate(['/contact', contact.id]);
   }
 }
 
