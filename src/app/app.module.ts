@@ -19,6 +19,7 @@ import {APP_ROUTES} from './app.routes';
 import {API_ENDPOINT} from './app.tokens';
 import {StoreModule} from '@ngrx/store';
 import {ROOT_REDUCER} from './state/app.state';
+import {ContactExistsGuard} from './contact-exists.guard';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import {ROOT_REDUCER} from './state/app.state';
   ],
   providers: [
     ContactsService,
+    ContactExistsGuard,
     {provide: API_ENDPOINT, useValue: 'http://localhost:4201/api'}
   ],
   bootstrap: [ContactsAppComponent]
